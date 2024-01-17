@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>1. Develop a Program in C for the following: 
+        a) Declare a calendar as an array of 7 elements (A dynamically Created array) to represent 7 days of a week. Each Element of the array is a structure having three fields. The first field is the name of the Day (A dynamically allocated String), The second field is the date of the Day (A integer), the third field is the description of the activity for a particular day (A dynamically allocated String).
+         b) Write functions create(), read() and display(); to create the calendar, to read the data from the keyboard and to print weeks activity details report on screen.
+        
+        #include<stdio.h>
+        #include<stdlib.h>
+        #include<string.h>
+        struct calElement
+        {
+        char *day;
+        int date;
+        char *activity;
+        };
+        struct calElement* create() // it creates calendar structure for 7 days 
+        {
+        struct calElement *calendar;
+        // dynamic allocation for calendar
+        calendar = (struct calElement *)malloc(sizeof(struct calElement)*7);
+        return calendar;
+        }
+        void read(struct calElement *calendar)
+        {
+            // Local Variable to store string elements 
+        char day[10];
+        char activity[25];
+        int i, date;
+        for(i = 0; i<7; i++)
+        {
+        printf("Enter the day : ");
+        scanf("%s",day);
+        calendar[i].day = (char *)malloc(strlen(day)+1); // dynamically allocated memory for day
+        strcpy(calendar[i].day, day); // copy day from local variable to heap 
+        printf("Enter the date : ");
+        scanf("%d",&date);
+        calendar[i].date = date;
+        getchar();
+        printf("Enter description of the activity : "); 
+        scanf("%[^\n]s",activity);
+        // dynamically allocate memory for activity 
+        calendar[i].activity = (char *)malloc(strlen(activity)+1); 
+        strcpy(calendar[i].activity, activity); // copy activity from local variable to heap 
+        }
+        }
+        void display(struct calElement *calendar)
+        {
+        int i;
+        printf("\n\nYour calendar\n");
+        printf("Day\t\tDate\t\tActivity");
+        //Display the calendar 
+        for(i = 0; i<7; i++){
+        printf("\n%s\t\t%d\t\t%s",calendar[i].day,calendar[i].date,calendar[i].activity );
+        }
+        void main()
+        {
+        struct calElement *calendar; // create structure variable of type pointer 
+        calendar=create(); //call create function 
+        read(calendar); // read function to read all inputs 
+        display(calendar); // Function to print calendar 
+        free(calendar); // Release the memory allocated dynamically 
+        }
+        
+        OUTPUT : 
+        
+        Enter the day : Mon
+        Enter the date : 10
+        Enter description of the activity : DS Class
+        Enter the day : Tue
+        Enter the date : 11
+        Enter description of the activity : Visit Library
+        Enter the day : Wed
+        Enter the date : 12
+        Enter description of the activity : OS Class
+        Enter the day : Thu
+        Enter the date : 13
+        Enter description of the activity : Research
+        Enter the day : Fri
+        Enter the date : 14
+        Enter description of the activity : Tutorial
+        Enter the day : Sat
+        Enter the date : 15
+        Enter description of the activity : Presentation on DD
+        Enter the day : Sun
+        Enter the date : 16
+        Enter description of the activity : Go to Movie
+        
+        Your calender
+        Day		Date		Activity
+        Mon		10		DS Class
+        Tue		11		Visit Library
+        Wed		12		OS Class
+        Thu		13		Research
+        Fri		14		Tutorial
+        Sat		15		Presentation on DD
+        Sun		16		Go to Movie
+        
+        2. Develop a Program in C for the following operations on Strings.  
+        a. Read a main String (STR), a Pattern String (PAT) and a Replace String (REP).
+        b. Perform Pattern Matching Operation: Find and Replace all occurrences of PAT in STR with REP if PAT exists in STR. Report suitable messages in case PAT does not exist in STR .Support the program with functions for each of the above operations. Don't use Built-in functions.
+        
+        #include<stdio.h>
+        char STR[100],PAT[100],REP[100],ANS[100];
+        int s, p, r, a, flag = 0;
+        //Function Declaration
+        void read();
+        void replace();
+        void display();
+        void main()
+        {
+        read();
+        replace();
+        void display();
+        }
+        void read()
+        {
+        printf("Enter the MAIN string: \n");
+        scanf("%[^\n]s",STR);
+        printf("Enter a PATTERN string: \n");
+        scanf("%s",PAT);
+        printf("Enter a REPLACE string: \n");
+        scanf("%s",REP);
+        }
+        void replace ()
+        {
+             s = p = a = 0;
+        while ( STR[s] != '\0')
+        {
+        // Checking for Match
+        if ( STR[s] == PAT[p] )
+        {
+        p++;
+        s++;
+        //if the first character is matched check for entire PAT string 
+        if ( PAT[p] == '\0')
+        {
+            flag=1;
+            for(r = 0; REP[r] != '\0';r++, a++)
+        ANS[a] = REP[r];
+            p = 0;
+        }
+        }
+        else //Mismatch
+        {
+        ANS[a] = STR[s];
+        s++;
+        a++;
+        p = 0;
+        }
+        }
+        }
+        void print()
+        {
+        if(flag==0)
+        printf("Pattern doesn't found!!!");
+        else
+        {
+        ANS[a] = '\0';
+        printf("\nThe RESULTANT string is:\n%s\n" ,ANS);
+        }
+        }
+        
+        OUTPUT 1:
+        1.Enter the MAIN string: 
+        good morning
+        Enter a PATTERN string: 
+        morning
+        Enter a REPLACE string: 
+        day
+        The RESULTANT string is:
+        good day
+        
+        OUTPUT 2:
+        2. Enter the MAIN string: 
+        ACHARYA
+        Enter a PATTERN string: 
+        COLLEGE
+        Enter a REPLACE string: 
+        INSTITUTE
+        Pattern doesn't found!!!
+        
+        3. Develop a menu driven Program in C for the following operations on STACK of Integers (Array Implementation of Stack with maximum size MAX)
+        a. Push an Element on to Stack
+        b. Pop an Element from Stack
+        c. Demonstrate how Stack can be used to check Palindrome
+        d. Demonstrate Overflow and Underflow situations on Stack
+        e. Display the status of Stack
+        f. Exit
+        Support the program with appropriate functions for each of the above operations
+        
+        #include<stdio.h>
+        #include<stdlib.h>
+        #include<math.h>
+        #define MAX 5
+        int s[MAX],top = -1,item;
+        int IsFull()
+        {
+            if(top>=MAX-1)
+                return 1;
+            return 0;
+        }
+        int IsEmpty()
+        {
+            if(top= = -1)
+                return 1;
+            return 0;
+        }
+        void push(int item)
+        {
+            top++;
+            s[top]=item;
+        }
+        void pop()
+        {
+            item=s[top];
+            top--;
+        }
+        void display()
+        {
+            int i;
+            printf("\n the elements of the stack are");
+            for(i=top;i>=0;i--)
+            printf("\n %d",s[i]);
+        }
+        
+        void check_pal()
+        {
+            int num=0,temp,digit,revnum=0,k=0;
+            if(top==-1)
+            {
+                printf("Stack is empty\n");
+                return;
+            }
+            else
+            {
+                while(top!=-1)
+                {
+                    pop();
+                    num=num*10+item;
+                    revnum=item*pow(10,k)+revnum;
+                    k=k+1;
+                }
+                printf("\nReverse Number of %d is is: %d\n",num, revnum);
+                if(num == revnum)
+                printf("The stack contains a Palindrome number\n");
+                else
+                printf("The stack does not contain a Palindrome number\n");
+            }
+        }
+        void main()
+        {
+        int ch;
+        
+            do
+            {
+            printf("\n1. Push \n2. Pop \n3. Display\n4. Check Palindrome 5. Exit\n");
+                printf("\n Enter the choice: ");
+                scanf("%d",&ch);
+                switch(ch)
+                {
+                    case 1: printf("\n Enter the element to be inserted");
+                            scanf("%d",&item);
+                            if(IsFull())
+                                printf("Stack Overflow\n");
+                            else
+                                push(item);
+                            break;
+                    case 2: if(IsEmpty())
+                                printf("Stack Underflow\n");
+                            else
+                            {
+                                pop();
+                                printf("The item deleted is %d\n",item);
+                            }
+                            break;
+                    case 3: if(IsEmpty())
+                            printf("Stack is Empty\n");
+                            else
+                                display();
+                            break;
+                    case 4: check_pal();
+                            break;
+                    case 5: printf("Program Terminated \n");
+        exit(0);
+                    default:printf("Invalid choice: \n");
+                 }
+            }while(ch!=5);
+        }
+        
+        OUTPUT:
+        1. Push 
+        2. Pop 
+        3. Display
+        4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 1
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 9
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 9
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 1
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 3
+         the elements of the stack are
+         1
+         9
+         9
+         1
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 4
+         Reverse Number of 1991 is is: 1991
+         The stack contains a Palindrome number
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 2
+         Stack Underflow
+        
+        1. Push 
+        2. Pop 
+        3. Display
+        4. Check Palindrome 5. Exit
+        
+        1. Push 
+        2. Pop 
+        3. Display
+        4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 10
+         10
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 20
+         20
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 30
+         30
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 40
+         40
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 50
+         50
+        
+         1. Push 
+         2. Pop 
+         3. Display
+         4. Check Palindrome 5. Exit
+        
+         Enter the choice: 1
+         Enter the element to be inserted 60
+         60
+         Stack Overflow
+        
+        4. A Program in C for converting an Infix Expression to Postfix Expression. The below program support for both parenthesized and free parenthesized expressions with the operators: +, -, *, /, %(Remainder), ^(Power) and alphanumeric operands.
+        
+        #include <stdio.h>
+        #define SIZE 20
+        char s[SIZE];
+        int top = -1;
+        void push(char elem)
+        {
+            s[++top] = elem;
+        }
+        char pop()
+        {
+            return (s[top--]);
+        }
+        int precedence(char elem) /* Function for precedence */
+        {
+            switch (elem)
+            {
+                case '#': return 0;
+                case '(': return 1;
+                case '+':
+                case '-': return 2;
+                case '*':
+                case '/':
+                case '%': return 3;
+                case '$':
+                case '^': return 4;
+            }
+            return elem;
+        }
+        void main()
+        {
+            char infix[50], postfix[50], ch, elem;
+            int i = 0, k = 0;
+            printf("\n\nEnter the Infix Expression: ");
+            scanf("%s", infix);
+            push('#');
+            while ((ch = infix[i++]) != '\0')
+            {
+                if (ch == '(')
+                    push(ch);
+                else if (isalnum(ch))
+                    postfix[k++] = ch;
+                else if (ch == ')')
+                {
+                    while (s[top] != '(')
+                        postfix[k++] = pop();
+                    elem = pop(); /* Remove ( */
+                }
+                else /* Operator */
+                {
+                    while (precedence(s[top]) >= precedence(ch))
+                        postfix[k++] = pop();
+                    push(ch);
+                }
+            }
+            while (s[top] != '#'){ /* Pop from stack till empty */
+                postfix[k++] = pop();
+            }
+            postfix[k] = '\0'; /* Make pofx as valid string */
+            printf("\nGiven Infix Expression is: %s\n",infix);
+            printf("\nPostfix Expression is: %s\n", postfix);
+        }
+        OUTPUT 1:
+        Enter the Infix Expression: A+B*C+D
+        Given Infix Expression is: A+B*C+D
+        Postfix Expression is: ABC*+D+
+        
+        OUTPUT 2:
+        Enter the Infix Expression: ((4+8)(6-5))/((3-2)(2+2))
+        Given Infix Expression is: ((4+8)(6-5))/((3-2)(2+2))
+        Postfix Expression is: ((4+8)(6-5))/((3-2)(2+2))
+        
+        5. Develop a Program in C for the following Stack Applications a. Evaluation of Suffix expression with single digit operands and operators: +, -, *, /, %, ^ b. Solving Tower of Hanoi problem with n disks
+        
+        5a.
+        #include<stdio.h>
+        #include<math.h>
+        #include<string.h>
+        #include<ctype.h>
+        int compute(char symbol, int op1, int op2)
+        {
+        switch(symbol)
+        {
+        case '+': return op1+op2; /* Perform addition */
+        case '-': return op1-op2; /* Perform subtraction */
+        case '*': return op1*op2; /* Perform multiplaction */
+        case '/': return op1/op2; /* Perform division */
+        case '%': return op1%op2; /* Perform division and gives reminder */
+        case '$':
+        case '^': return pow(op1,op2); /* Compute power */
+        }
+        }
+        void main()
+        {
+        int s[20]; /* Place for stack elements */
+        int res; /* Holds partial or final result */
+        int op1; /* First operand */
+        int op2; /* Second operand */
+        int top;
+        /* Points to the topmost element */
+        int i;
+        /* Index value */
+        char postfix[20]; /* Input expression */
+        char symbol; /* Scanned postfix symbol */
+        printf("Enter the postfix expression\n");
+        scanf("%s",postfix);
+        top=-1;
+        for(i=0;i<strlen(postfix);i++)
+        {
+        symbol=postfix[i]; /* Obtains the next character */
+        if(isdigit(symbol)) /* If character is a digit or not */
+        s[++top]=symbol-'0';
+        else
+        {
+        op2=s[top--];
+        /* Obtain second operand from stack */
+        op1=s[top--];
+        /* Obtain first operand from stack */
+        /* Perform specified operation */
+        res=compute(symbol,op1,op2);
+        /* Push partial results on the stack */
+        s[++top]=res;
+        }
+        }
+        res=s[top--];
+        printf("the result is %d\n",res);
+        }
+        
+        OUTPUT 1:
+        Enter the postfix expression
+        23^
+        the result is 8
+        
+        OUTPUT 2:
+        Enter the postfix expression
+        234+*6-
+        the result is 8
+        
+        5b.
+        #include<stdio.h>
+        void towers(int, char, char, char); 
+        void main()
+        {
+        int num;
+        printf("Enter the number of disks : ");
+        scanf("%d", &num);
+        printf("The sequence of moves involved in the Tower of Hanoi are :\n");
+        towers(num, 'A', 'B', 'C');
+        }
+        void towers(int n, char source, char temp, char dest)
+        {
+        if (n == 1)
+        {
+        printf("\n Move disk 1 from peg %c to peg %c", source, dest);
+        return;
+        }
+        towers(n - 1, source, dest, temp);
+        printf("\n Move disk %d from peg %c to peg %c", n, source, dest);
+        towers(n - 1, temp, source, dest);
+        }
+        
+        OUTPUT 1:
+        Enter the number of disks : 2
+        The sequence of moves involved in the Tower of Hanoi are :
+        Move disk 1 from peg A to peg B
+        Move disk 2 from peg A to peg C
+        Move disk 1 from peg B to peg C
+        
+        OUTPUT 2:
+        Enter the number of disks : 1
+        The sequence of moves involved in the Tower of Hanoi are :
+        Move disk 1 from peg A to peg C
+        
+        6. Design, Develop and Implement a menu driven Program in C for the following operations on Circular QUEUE of Characters (Array Implementation of Queue with maximum size MAX) a. Insert an Element on to Circular QUEUE b. Delete an Element from Circular QUEUE c. Demonstrate Overflow and Underflow situations on Circular QUEUE d. Display the status of Circular QUEUE e. Exit Support the program with appropriate functions for each of the above operations.
+        
+        #include<stdio.h>
+        #include<stdlib.h>
+        #define QSIZE 4
+        int q[QSIZE], r=-1, f=0, count=0, item;
+        /* Insert Operation */
+        void insert()
+        {
+            /* Check for queue overflow */
+            if(count == QSIZE)
+            {
+                printf("Queue Overflow\n");
+                return;
+            }
+            r = (r+1) % QSIZE; /* Increment rear by 1 */
+            q[r] = item; /* Insert into queue */
+            count++;
+        }
+        /* Delete Operation */
+        void del()
+        {
+            /* Check for Queue Underflow */
+            if(count == 0)
+            {
+                printf("Queue Underflow\n");
+                return;
+            }
+            printf("The item deleted is: %d\n", q[f]);
+            f = (f+1) % QSIZE;
+            count--;
+        }
+        /* Display Operation */
+        void display(int front)
+        {
+            int i;
+            /* Check for Empty Queue */
+            if(count == 0)
+            {
+                printf("Queue is Empty\n");
+                return;
+            }
+            /* Display the contents of the queue */
+            printf("Contents of the queue\n");
+            for(i=1; i<=count; i++)
+            {
+                printf("%d\n",q[front]);
+                front = (front+1) % QSIZE;
+            }
+        }
+        void main()
+        {
+            int choice;
+            do
+            {
+                printf("***********************\n");
+                printf("Circular Queue Operations\n");
+                printf("1. Insert\n");
+                printf("2. Delete\n");
+                printf("3. Display\n");
+                printf("4. Quit\n");
+                printf("Enter your choice:\n");
+                scanf("%d",&choice);
+                switch(choice)
+                {
+                    case 1: printf("Enter the item to be inserted\n");
+                            scanf("%d",&item);
+                            insert();
+                            break;
+                    case 2: del();
+                            break;
+                    case 3: display(f);
+                            break;
+                    case 4: exit(0);
+                    default:printf("Invalid choice\n");
+                }
+            }while(choice!=4);
+        }
+        
+        OUTPUT
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        10
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        20
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        30
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        3
+        Contents of the queue
+        10
+        20
+        30
+        40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        50
+        Queue Overflow
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        3
+        Contents of the queue
+        10
+        20
+        30
+        40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        The item deleted is: 10
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        1
+        Enter the item to be inserted
+        60
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        3
+        Contents of the queue
+        60
+        20
+        30
+        40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        The item deleted is: 20
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        3
+        Contents of the queue
+        60
+        30
+        40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        The item deleted is: 30
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        The item deleted is: 40
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        The item deleted is: 60
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        2
+        Queue Underflow
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        3
+        Queue is Empty
+        ***********************
+        Circular Queue Operations
+        1. Insert
+        2. Delete
+        3. Display
+        4. Quit
+        
+        Enter your choice:
+        4
+        </p>
+</body>
+</html>
